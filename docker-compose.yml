@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  acceptcert: 
+    build: acceptcert
+    image: labizbille/acceptcert:1.1
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - /etc/docker:/dockercerts
+    environment:
+      - CA_CERT=
+       -----BEGIN CERTIFICATE-----\n
+       Replace with your own       
+       -----END CERTIFICATE-----
+
+    
+  registry: 
+    build: registry
+    image: labizbille/s3_env_registry:1.1
+    ports:
+      - 5000:5000
+    environment:
+      - REGISTRY_STORAGE_S3_ACCESSKEY=
+      - REGISTRY_STORAGE_S3_SECRETKEY=
+      - REGISTRY_STORAGE_S3_BUCKET=
+      - REGISTRY_STORAGE_S3_REGION=us-west-2
+      - REGISTRY_STORAGE_S3_ROOTDIRECTORY=/myregistry
+      - REGISTRY_HTTP_SECRET=
+      - CA_CERT=
+       -----BEGIN CERTIFICATE-----\n
+       Replace with your own
+       -----END CERTIFICATE-----
+      - CA_KEY=
+       -----BEGIN PRIVATE KEY-----\n
+       Replace with your own
+       -----END PRIVATE KEY-----
+
+    
+
